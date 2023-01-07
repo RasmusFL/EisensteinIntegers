@@ -79,7 +79,7 @@ And we can verify that (36 - 56ω)(-152 + 179ω) = -144 + 913ω modulo 587. On t
 ```c++
 EImodlinearsolve({36, -56}, {-144, 913}, {8,2}); // outputs "No solution to equation: (36ω-56ω)rho = -144+913ω (mod 8+2ω)"
 ```
-The function `EIprimefactor` factors an Eisenstein integer into a product og primes and a single unit (1, -1, ω, -ω, ω^2 or -ω^2). The output is a vector of these Eisenstein integers. To write the factorization in a nice way as a product, use the function `printEIproduct`. As an example,
+The function `EIprimefactor` factors an Eisenstein integer into a product of primes and a single unit (1, -1, ω, -ω, ω^2 or -ω^2). The output is a vector of these Eisenstein integers. To write the factorization in a nice way as a product, use the function `printEIproduct`. As an example,
 
 ```c++
 printEIproduct(EIprimefactor({894582, -1870956}));
