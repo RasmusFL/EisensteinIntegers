@@ -172,20 +172,10 @@ EI EIprimary(EI alpha)
 {
     if (alpha.norm() % 3 == 0)
         throw runtime_error("input must not be divisible by 1 - w");
-    if (alpha.get_a() % 3 == 0) {
-        if (alpha.get_b() % 3 == 1 || alpha.get_b() % 3 == -2) return EI(1,1)*alpha;
-        if (alpha.get_b() % 3 == 2 || alpha.get_b() % 3 == -1) return EI(-1,-1)*alpha;
+    for (EI beta : associates(alpha)) {
+        if (beta.get_b() % 3 == 0 && (beta.get_a() % 3 == 2 || beta.get_a() % 3 == -1))
+            return beta;
     }
-    if (alpha.get_a() % 3 == 1 || alpha.get_a() % 3 == -2) {
-        if (alpha.get_b() % 3 == 0) return EI(-1)*alpha;
-        if (alpha.get_b() % 3 == 1 || alpha.get_b() % 3 == -2) return EI(0,1)*alpha;
-    }
-    if (alpha.get_a() % 3 == 2 || alpha.get_a() % 3 == -1) {
-        if (alpha.get_b() % 3 == 0) return alpha;
-        if (alpha.get_b() % 3 == 2 || alpha.get_b() % 3 == -1) return EI(0,-1)*alpha;
-    }
-    cout << "FEJL!";
-
 }
 
 // primes and algorithms
@@ -197,10 +187,9 @@ bool isEIprime(const EI& alpha)
 // return false even if alpha is an Eisenstein prime
 {
     if (is_prop_prime(alpha.norm()) == 2) return true;
-    if (alpha.get_a() != 0 && alpha.get_b() == 0)
-        if (abs(alpha.get_a()) % 3 == 2 && is_prop_prime(alpha.get_a()) == 2) return true;
-    if (alpha.get_a() == 0 && alpha.get_b() != 0)
-        if (abs(alpha.get_b()) % 3 == 2 && is_prop_prime(alpha.get_b()) == 2) return true;
+    for (EI beta : associates(alpha)) {
+        if (beta.get_a() % 3 == 2 && is_prop_prime(beta.get_a()) == 2) return true;
+    }
     return false;
 }
 
@@ -228,7 +217,7 @@ EI EIgcd(const vector<EI>& EIs)
 }
 
 bool EIpairwisecoprime(const vector<EI>& EIs)
-// returns true, if the GIs in the vector are pairwise coprime
+// returns true, if the EIs in the vector are pairwise coprime
 {
     for (int i = 0; i < EIs.size(); ++i) {
         for (int j = i + 1; j < EIs.size(); ++j) {
@@ -240,7 +229,7 @@ bool EIpairwisecoprime(const vector<EI>& EIs)
 
 vector<EI> EIexgcd(const EI& alpha, const EI& beta)
 // Extended Euclidean algorithm for Eisenstein integers
-// Returns {gcd, s, t} where s and t are coefficients satisfying alpha*s + beta*t = gcd
+// returns {gcd, s, t} where s and t are coefficients satisfying alpha*s + beta*t = gcd
 {
     if (beta == EI(0)) {
         vector<EI> res = {alpha, EI(1), EI(0)};
